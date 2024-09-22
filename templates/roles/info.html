@@ -7,7 +7,7 @@
     <div class="col-12 mb-2">
         <h3>{{.data.Title}}</h3>
         <span>
-            <a href="/cluster/roles">(back to all)</a>
+            <a href="/cluster/roles/list">(back to all)</a>
         </span>
     </div>
 
@@ -55,6 +55,19 @@
                 </tr>
             </tbody>
         </table>
+
+        <form action="/cluster/role/delete" method="post">
+            <div class="form-group">
+                <input type="hidden" name="csrf" value="{{.data.csrf}}">
+                <input type="hidden" name="name" value="{{.data.Info.Name}}">
+                <a href="/cluster/role/edit/{{.data.Info.Name}}" class="btn btn-outline-secondary">Edit</a>
+                <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Delete</button>
+            </div>
+    
+            <div>
+                <small class="text-danger"><i>Warning: Removing roles can be dangerous</i></small>
+            </div>
+        </form>
     </div>
 {{end}}
 

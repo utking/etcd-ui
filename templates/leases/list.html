@@ -14,13 +14,15 @@
                 title="Create new">New...</a>
 
             <div class="form-group">
-                <input class="form-control" name="filter" value="{{.data.Filter}}" autofocus>
+                <input class="form-control" name="filter"
+                    placeholder="Full Lease ID (hex)"
+                    value="{{.data.Filter}}" autofocus>
             </div>
 
             <div class="form-group input-group mr-2">
                 <div class="input-group-append">
                     <button class="btn btn-outline-primary"
-                        type="submit" title="Filter">Filter</button>
+                        type="submit" title="Filter">Search</button>
                 </div>
             </div>
         </form>

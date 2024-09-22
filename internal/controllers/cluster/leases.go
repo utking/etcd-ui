@@ -103,7 +103,7 @@ func deleteLease(c echo.Context) error {
 		}
 	}
 
-	return c.Redirect(http.StatusSeeOther, "/cluster/leases")
+	return c.Redirect(http.StatusSeeOther, "/cluster/leases/list")
 }
 
 func createLease(c echo.Context) error {

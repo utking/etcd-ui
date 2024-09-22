@@ -11,7 +11,7 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 	router.GET("/stats", clusterIndex)
 	router.GET("/elect/:id", electNewLeader)
 
-	router.GET("/leases", indexLeases)
+	router.GET("/leases/list", indexLeases)
 	router.GET("/lease/:id", infoLease)
 
 	router.GET("/lease/create", createLease)
@@ -19,11 +19,19 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 	router.POST("/lease/create", createLease)
 	router.POST("/lease/delete", deleteLease)
 
-	router.GET("/users", indexUsers)
+	router.GET("/users/list", indexUsers)
 	router.GET("/user/:name", infoUser)
+	router.GET("/user/edit/:name", createUser)
+	router.GET("/user/create", createUser)
+	router.POST("/user/create", createUser)
+	router.POST("/user/delete", deleteUser)
 
-	router.GET("/roles", indexRoles)
+	router.GET("/roles/list", indexRoles)
 	router.GET("/role/:name", infoRole)
+	router.GET("/role/edit/:name", createRole)
+	router.GET("/role/create", createRole)
+	router.POST("/role/create", createRole)
+	router.POST("/role/delete", deleteRole)
 
 	router.GET("/keys/list", listKeys)
 	router.GET("/key", infoKey)
@@ -40,31 +48,65 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 				Title:   "Stats",
 				URIPath: "/cluster/stats",
 			},
+		},
+		"Keys": {
+			{
+				Type:    "item",
+				Title:   "Add",
+				URIPath: "/cluster/key/create",
+			},
 			{
 				Title: "-",
 			},
 			{
 				Type:    "item",
-				Title:   "Keys",
+				Title:   "List",
 				URIPath: "/cluster/keys/list",
 			},
+		},
+		"Leases": {
 			{
 				Type:    "item",
-				Title:   "Leases",
-				URIPath: "/cluster/leases",
+				Title:   "Add",
+				URIPath: "/cluster/lease/create",
 			},
 			{
 				Title: "-",
 			},
 			{
 				Type:    "item",
-				Title:   "Roles",
-				URIPath: "/cluster/roles",
+				Title:   "List",
+				URIPath: "/cluster/leases/list",
+			},
+		},
+		"Users": {
+			{
+				Type:    "item",
+				Title:   "Add",
+				URIPath: "/cluster/user/create",
+			},
+			{
+				Title: "-",
 			},
 			{
 				Type:    "item",
-				Title:   "Users",
-				URIPath: "/cluster/users",
+				Title:   "List",
+				URIPath: "/cluster/users/list",
+			},
+		},
+		"Roles": {
+			{
+				Type:    "item",
+				Title:   "Add",
+				URIPath: "/cluster/role/create",
+			},
+			{
+				Title: "-",
+			},
+			{
+				Type:    "item",
+				Title:   "List",
+				URIPath: "/cluster/roles/list",
 			},
 		},
 	})
