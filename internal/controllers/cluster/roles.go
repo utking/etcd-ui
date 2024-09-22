@@ -47,7 +47,7 @@ func indexRoles(c echo.Context) error {
 func infoRole(c echo.Context) error {
 	var (
 		code     = http.StatusOK
-		role     = c.Param("name")
+		role     = c.QueryParam("name")
 		roleInfo types.RoleInfo
 	)
 

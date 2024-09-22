@@ -38,7 +38,7 @@
             <div class="form-group">
                 <input type="hidden" name="csrf" value="{{.data.csrf}}">
                 <input type="hidden" name="name" value="{{.data.Info.Name}}">
-                <a href="/cluster/user/edit/{{.data.Info.Name}}" class="btn btn-outline-secondary">Edit</a>
+                <a href="/cluster/user/edit?name={{.data.Info.Name}}" class="btn btn-outline-secondary">Edit</a>
                 <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Delete</button>
             </div>
     

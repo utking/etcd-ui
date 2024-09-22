@@ -20,14 +20,14 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 	router.POST("/lease/delete", deleteLease)
 
 	router.GET("/users/list", indexUsers)
-	router.GET("/user/:name", infoUser)
+	router.GET("/user", infoUser)
 	router.GET("/user/edit/:name", createUser)
 	router.GET("/user/create", createUser)
 	router.POST("/user/create", createUser)
 	router.POST("/user/delete", deleteUser)
 
 	router.GET("/roles/list", indexRoles)
-	router.GET("/role/:name", infoRole)
+	router.GET("/role", infoRole)
 	router.GET("/role/edit/:name", createRole)
 	router.GET("/role/create", createRole)
 	router.POST("/role/create", createRole)

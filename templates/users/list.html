@@ -40,7 +40,7 @@
                 {{range $item := .data.Items}}
                 <tr>
                     <td>
-                        <a href="/cluster/user/{{ $item }}">{{ $item }}</a>
+                        <a href="/cluster/user?name={{ $item }}">{{ $item }}</a>
                     </td>
                 </tr>
                 {{ end }}

@@ -47,7 +47,7 @@ func indexUsers(c echo.Context) error {
 func infoUser(c echo.Context) error {
 	var (
 		code     = http.StatusOK
-		username = c.Param("name")
+		username = c.QueryParam("name")
 		userInfo types.UserInfo
 	)
 
