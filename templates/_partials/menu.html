@@ -1,0 +1,51 @@
+{{define "html-menu"}}
+<ul class="navbar-nav mr-auto">
+    {{range .menu.UserItems}}
+        {{range $title, $items := .}}
+        <li class="nav-item dropdown">
+            <a class="nav-link" id="navbarDropdown2" data-target="#" href=""
+                data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">{{$title}}</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                {{range $items}}
+                    {{if eq .Title "-"}}
+                    <div class="dropdown-divider"></div>
+                    {{else}}
+                    <li><a class="dropdown-item"
+                        href="{{.URIPath}}" {{if .Target}}target="{{.Target}}" {{end}}>
+                            {{.Title}}</a></li>
+                    {{end}}
+                {{end}}
+            </ul>
+        </li>
+        {{end}}
+    {{end}}
+    {{if .is_admin}}
+    <li class="nav-item dropdown">
+        <a class="nav-link" id="navbarDropdown2" data-target="#" href=""
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin Panel</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+        {{range .menu.AdminItems}}
+            {{range $title, $items := .}}
+            <li class="dropdown-submenu">
+                <a class="dropdown-item dropdown-toggle" href="#">{{$title}}</a>
+                <ul class="dropdown-menu">
+                {{range $items}}
+                    {{if eq .Title "-"}}
+                    <div class="dropdown-divider"></div>
+                    {{else}}
+                    <li><a class="dropdown-item"
+                        href="{{.URIPath}}" {{if .Target}}target="{{.Target}}" {{end}}>
+                            {{.Title}}</a></li>
+                    {{end}}
+                {{end}}
+                </ul>
+            </li>
+            {{end}}
+        {{end}}
+        </ul>
+    </li>
+    {{end}}
+</ul>
+{{end}}

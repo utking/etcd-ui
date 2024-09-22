@@ -1,0 +1,49 @@
+{{ extends "layout.html" }}
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}}</h3>
+        <span>
+            <a href="/cluster/keys/list">(back to all)</a>
+        </span>
+    </div>
+
+    {{if .data.KVItem}}
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th>TTL, sec</th>
+                </tr>
+            </thead>
+            {{if .data.KVItem}}
+            <tbody>
+                <tr>
+                    <td>{{.data.KVItem.Key}}</td>
+                    <td>{{.data.KVItem.Value.Unwrap}}</td>
+                    <td>
+                        <a href="/cluster/lease/{{.data.KVItem.LeaseID}}">{{.data.KVItem.LeaseTTL}}</a>
+                    </td>
+                </tr>
+            </tbody>
+            {{end}}
+        </table>
+
+        <form action="/cluster/key/delete" method="post">
+        <div class="form-group">
+            <input type="hidden" name="csrf" value="{{.data.csrf}}">
+            <input type="hidden" name="key" value="{{.data.KVItem.Key}}">
+            <a href="/cluster/key/edit/{{.data.KVItem.Key}}" class="btn btn-outline-secondary">Edit</a>
+            <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Delete</button>
+        </div>
+        </form>
+    </div>
+    {{end}}
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

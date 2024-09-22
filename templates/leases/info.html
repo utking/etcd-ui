@@ -1,0 +1,49 @@
+{{ extends "layout.html" }}
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}}</h3>
+        <span>
+            <a href="/cluster/leases">(back to all)</a>
+        </span>
+    </div>
+
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>GrantedTTL, sec</th>
+                    <th>Remaining TTL, sec</th>
+                    <th>Assigned Keys, conut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{.data.Info.HexID}}</td>
+                    <td>{{.data.Info.GrantedTTL}}</td>
+                    <td>{{.data.Info.TTL}}</td>
+                    <td>{{.data.Info.KeysCounter}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <form action="/cluster/lease/delete" method="post">
+        <div class="form-group">
+            <input type="hidden" name="csrf" value="{{.data.csrf}}">
+            <input type="hidden" name="id" value="{{.data.Info.ID}}">
+            <a href="/cluster/lease/edit/{{.data.Info.ID}}" class="btn btn-outline-secondary">Edit</a>
+            <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Delete</button>
+        </div>
+
+        <div>
+            <small class="text-danger"><i>Warning: Removing the lease will remove all the keys that use it</i></small>
+        </div>
+        </form>
+    </div>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

@@ -1,0 +1,55 @@
+{{ extends "layout.html" }}
+
+{{define "custom_css"}}
+<style>
+    table > thead > tr > th.col-setting-key {
+        vertical-align: text-top;
+        width: 15rem;
+    }
+</style>
+{{end}}
+
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}}</h3>
+    </div>
+
+    <div class="col-12">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th class="col-setting-key">Endpoints</th>
+                    <td>
+                        <ul>
+                            {{range $item := .data.Settings.Endpoints}}
+                            <li>{{$item}}</li>
+                            {{end}}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>UI is password-protected?</th>
+                    <td>{{if .data.Settings.UIWithCredentials}}Yes{{else}}No{{end}}</td>
+                </tr>
+                <tr>
+                    <th>Connect with credentials?</th>
+                    <td>{{if .data.Settings.WithCredentials}}Yes{{else}}No{{end}}</td>
+                </tr>
+                <tr>
+                    <th>Connect with SSL?</th>
+                    <td>{{if .data.Settings.WithSSL}}Yes{{else}}No{{end}}</td>
+                </tr>
+                <tr>
+                    <th>Operation Timeout</th>
+                    <td>{{.data.Settings.Timeout}}</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

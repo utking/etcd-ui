@@ -1,0 +1,5 @@
+.env*
+.git*
+infra
+README.md
+LICENSE

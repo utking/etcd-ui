@@ -1,0 +1,12 @@
+{{ extends "layout.html" }}
+{{define "content"}}
+    <div class="col-12 mb-2">
+        <h3>404 - Not Found</h3>
+    </div>
+
+    <div id="error-block" class="col-12 alert alert-danger" style="display: block;">
+        <p>{{ .data.Error }}</p>
+    </div>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

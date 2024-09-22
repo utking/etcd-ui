@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}{{ if .data.Title }} | {{ .data.Title }}{{ end }}</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- CSS only -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <!-- Own global CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    {{ block "custom_css" .}}{{end}}
+
+</head>
+<body class="d-flex flex-column">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Etcd UI</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {{template "html-menu" .}}
+        </div>
+    </nav>
+
+    <section id="main-container" class="flex-grow mb-12">
+        <div class="pt-2">
+            <div class="row" style="margin-bottom: 4em;">
+                <div class="container-fluid">
+                    <div class="row" role="alert">
+                        {{ block "content". }}
+                        Hello, Username!
+                        {{ end }}
+                    </div>
+                </div>
+                <div id="scale-output" class="container"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white fixed-bottom">
+        <div class="container-fluid py-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <h6>Etcd UI &copy; {{ block "footer-year" .}}{{end}} / ver: {{.version}}</h6></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/js/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="/js/popper.min.js"
+            integrity="sha512-5WvZa4N7Jq3TVNCp4rjcBMlc6pT3lZ7gVxjtI6IkKW+uItSa+rFgtFljvZnCxQGj8SUX5DHraKE6Mn/4smK1Cg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/bootstrap.min.js"
+            integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+            crossorigin="anonymous"></script>
+    <script>
+        $('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+            if (!$(this).next().hasClass('show')) {
+                $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+            }
+            const $subMenu = $(this).next('.dropdown-menu');
+            $subMenu.toggleClass('show');
+
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+                $('.dropdown-submenu .show').removeClass('show');
+            });
+
+            return false;
+        });
+    </script>
+    {{ block "custom_js" .}}{{end}}
+</body>
+</html>

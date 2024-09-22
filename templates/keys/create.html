@@ -1,0 +1,60 @@
+{{ extends "layout.html" }}
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}}</h3>
+        <span>
+            <a href="/cluster/keys/list">(back to all)</a>
+        </span>
+    </div>
+
+    <div class="col-12 mb-2">
+        <form method="post" action="/cluster/key/create">
+        <div class="form-group">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th>TTL, sec</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input class="form-control" value="{{.data.Item.Key}}"
+                            autocomplete="off"
+                            autofocus
+                            minlength="2"
+                            name="key"
+                            maxlength="256">
+                    </td>
+                    <td>
+                        <input class="form-control" value="{{.data.Item.Value}}"
+                            autocomplete="off"
+                            name="value"
+                            maxlength="256">
+                    </td>
+                    <td>
+                        <input class="form-control" value="{{.data.Item.TTL}}"
+                            name="ttl"
+                            min="0"
+                            type="number">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" name="csrf" value="{{.data.csrf}}">
+            <button class="btn btn-outline-primary" type="submit">Save</button>
+        </div>
+        </form>
+    </div>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

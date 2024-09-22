@@ -1,0 +1,61 @@
+{{ extends "layout.html" }}
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}}</h3>
+        <span>
+            <a href="/cluster/roles">(back to all)</a>
+        </span>
+    </div>
+
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Permissions Type</th>
+                    <th>Ranges / Keys</th>
+                </tr>
+            </thead>
+
+            <tbody id="items-list">
+                <tr>
+                    <th>KV Read</th>
+                    <td>
+                        <ul>
+                    {{range $item := .data.Info.KVRead}}
+                    <li>
+                        {{if eq $item.RangeEnd ""}}
+                        {{$item.Key}}{{$item.RangeEnd}}
+                        {{else}}
+                        [{{$item.Key}}, {{$item.RangeEnd}}) (prefix {{$item.Key}})
+                        {{end}}
+                    </li>
+                    {{ end }}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>KV Write</th>
+                    <td>
+                        <ul>
+                    {{range $item := .data.Info.KVWrite}}
+                    <li>
+                        {{if eq $item.RangeEnd ""}}
+                        {{$item.Key}}
+                        {{else}}
+                        [{{$item.Key}}, {{$item.RangeEnd}})
+                        {{end}}
+                    </li>
+                    {{ end }}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

@@ -1,0 +1,96 @@
+{{ extends "layout.html" }}
+
+{{define "custom_css"}}
+<style scoped>
+    table > thead > tr > th.col-setting-key,
+    table > thead > tr > th.col-member-name
+    {
+        width: 15rem;
+    }
+</style>
+{{end}}
+
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}}</h3>
+    </div>
+
+    <div class="col-12">
+        {{if .data.Header}}
+        <table class="table table-striped mb-2">
+            <thead class="thead-light">
+                <tr>
+                    <th class="col-setting-key">ClusterID</th>
+                    <td>{{.data.Header.ClusterID}}</td>
+                </tr>
+                <tr>
+                    <th>Responder Member ID</th>
+                    <td>{{.data.Header.MemberID}}</td>
+                </tr>
+                <tr>
+                    <th>Raft Term</th>
+                    <td>{{.data.Header.RaftTerm}}</td>
+                </tr>
+            </thead>
+        </table>
+        {{end}}
+
+        <h4>Cluster Members</h4>
+
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>PeerURLs</th>
+                    <th>ClientURLs</th>
+                    <th>Is Master</th>
+                    <th>Version</th>
+                    <th>DB Size, bytes</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+
+            <tbody id="items-list">
+                {{range $item := .data.Items}}
+                <tr>
+                    <td>{{ $item.Name }}</td>
+                    <td>{{ $item.PeerURLs }}</td>
+                    <td>{{ $item.ClientURLs }}</td>
+                    <td>{{ if $item.Health.IsMaster }}&checkmark;{{end}}</td>
+                    <td>{{ $item.Health.Version }}</td>
+                    <td>{{ $item.Health.DBSize }}</td>
+                    <td>
+                        {{ $item.ID }} (<a href="/cluster/elect/{{$item.ID}}">elect as leader</a>)
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+
+        <h4>Alarms List</h4>
+
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="col-member-name">Member Name</th>
+                    <th>Alarm Type</th>
+                </tr>
+            </thead>
+
+            <tbody id="alarms-list">
+                {{range $item := .data.Alarms}}
+                <tr>
+                    <td>{{ $item.MemberID }}</td>
+                    <td>{{ $item.Type }}</td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

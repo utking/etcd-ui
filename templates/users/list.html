@@ -1,0 +1,32 @@
+{{ extends "layout.html" }}
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}}</h3>
+    </div>
+
+    <div class="col-12">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Username</th>
+                </tr>
+            </thead>
+
+            <tbody id="items-list">
+                {{range $item := .data.Items}}
+                <tr>
+                    <td>
+                        <a href="/cluster/user/{{ $item }}">{{ $item }}</a>
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}
