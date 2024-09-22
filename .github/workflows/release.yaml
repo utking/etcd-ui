@@ -20,7 +20,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
-        goversion: "https://dl.google.com/go/go1.23.linux-amd64.tar.gz"
+        goversion: "https://dl.google.com/go/go1.23.1.linux-amd64.tar.gz"
         overwrite: TRUE
         binary_name: "etcd-ui"
         build_command: "CGO_ENABLED=0 go build -o bin/etcd-ui -ldflags='-w -s -extldflags=-static' internal/cmd/main.go"
