@@ -1,0 +1,27 @@
+on: 
+  release:
+    types: [created]
+permissions:
+  contents: write
+  packages: write
+jobs:
+  release-linux-amd64:
+    name: Release Go Binary
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # build and publish in parallel
+        goos: [linux]
+        goarch: [amd64, arm64]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: wangyoucao577/go-release-action@v1.51
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: "https://dl.google.com/go/go1.23.linux-amd64.tar.gz"
+        overwrite: TRUE
+        binary_name: "etcd-ui"
+        build_command: "CGO_ENABLED=0 go build -o bin/etcd-ui -ldflags='-w -s -extldflags=-static' internal/cmd/main.go"
+        extra_files: .env.example README.md LICENSE

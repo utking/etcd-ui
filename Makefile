@@ -4,7 +4,7 @@ install-air:
 	go install github.com/air-verse/air@latest
 
 build: test
-	go build -o bin/ui -ldflags="-w -s" internal/cmd/main.go
+	CGO_ENABLED=0 go build -o bin/etcd-ui -ldflags="-w -s -extldflags=-static" internal/cmd/main.go
 
 install-lint:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
