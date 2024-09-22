@@ -51,3 +51,17 @@ The image exposes port 8080/tcp. To run the application locally in Docker, you c
 ```bash
 docker run -it --rm -p 8080:8080 -v $(pwd)/.env:/app/.env -v $(pwd)/ssl:/app/ssl etcd-ui:local
 ```
+
+## Screenshots
+
+![main page](./docs/images/main.png)
+![cluster stats page](./docs/images/stats.png)
+![menu](./docs/images/menu.png)
+![keys](./docs/images/keys.png)
+![keys with leases](./docs/images/keys-w-lease.png)
+![key info](./docs/images/kv-info.png)
+![leases](./docs/images/leases.png)
+![roles](./docs/images/roles.png)
+![role info](./docs/images/role-info.png)
+![users](./docs/images/users.png)
+![user info](./docs/images/user-info.png)
