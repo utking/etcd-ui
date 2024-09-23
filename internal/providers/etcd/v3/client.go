@@ -169,7 +169,7 @@ func CheckAuthEnabled(
 		return false, fmt.Errorf("this should not have happened, retry please")
 	}
 
-	// We should not have gone here, so let's check the error again and see. Investigate when happend
+	// We should not have gone here, so let's check the error again and see. Investigate when happened
 	switch {
 	case strings.Contains(err.Error(), "authentication failed, invalid user ID or password"):
 		return true, nil

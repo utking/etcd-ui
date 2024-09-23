@@ -2,6 +2,7 @@ package http
 
 import (
 	"io"
+	"text/template"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -13,8 +14,11 @@ import (
 
 func InitTemplates(e *echo.Echo) error {
 	xt := extemplate.New()
+	funcs := template.FuncMap{
+		"inc": func(i int) int { return i + 1 },
+	}
 
-	if err := xt.ParseFS(templates.TemplateFiles, []string{".tmpl", ".html"}); err != nil {
+	if err := xt.Funcs(funcs).ParseFS(templates.TemplateFiles, []string{".tmpl", ".html"}); err != nil {
 		return err
 	}
 
