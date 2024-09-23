@@ -125,6 +125,7 @@ func (c *Client) AddRole(
 	}
 
 	fmt.Println("Done for", name)
+
 	return errors.Join(errList...)
 }
 
