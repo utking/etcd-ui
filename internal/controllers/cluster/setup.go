@@ -28,7 +28,8 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 
 	router.GET("/roles/list", indexRoles)
 	router.GET("/role", infoRole)
-	router.GET("/role/edit/:name", createRole)
+	router.GET("/role/edit/:name", editRolePermissions)
+	router.POST("/role/revoke/:name", revokeRolePermissions)
 	router.GET("/role/create", createRole)
 	router.POST("/role/create", createRole)
 	router.POST("/role/delete", deleteRole)

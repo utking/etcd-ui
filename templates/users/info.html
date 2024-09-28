@@ -34,18 +34,16 @@
             </tbody>
         </table>
 
+        {{if not .data.Error }}
         <form action="/cluster/user/delete" method="post">
             <div class="form-group">
                 <input type="hidden" name="csrf" value="{{.data.csrf}}">
                 <input type="hidden" name="name" value="{{.data.Info.Name}}">
-                <a href="/cluster/user/edit?name={{.data.Info.Name}}" class="btn btn-outline-secondary">Edit</a>
+                <a href="/cluster/user/edit?name={{.data.Info.Name}}" class="btn btn-outline-secondary">Edit User's Roles</a>
                 <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Delete</button>
             </div>
-    
-            <div>
-                <small class="text-danger"><i>Warning: Removing users can be dangerous</i></small>
-            </div>
         </form>
+        {{end}}
     </div>
 {{end}}
 

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 	"github.com/utking/etcd-ui/internal/helpers/utils"
 	"github.com/utking/etcd-ui/internal/providers/etcd/types"
 	v3 "github.com/utking/etcd-ui/internal/providers/etcd/v3"
@@ -92,37 +93,11 @@ func createRole(c echo.Context) error {
 	)
 
 	if err == nil {
-		// GET request
-		item.Name = c.Param("name")
-		if c.Request().Method == http.MethodGet && item.Name != "" {
-			roleItem, getErr := etcdClient.RoleInfo(item.Name)
-			if getErr == nil {
-				readPerms := make([]requests.KVPerm, 0, len(roleItem.KVRead))
-				writePerms := make([]requests.KVPerm, 0, len(roleItem.KVWrite))
-
-				for _, permItem := range roleItem.KVRead {
-					readPerms = append(readPerms, requests.KVPerm{
-						Key:     permItem.Key,
-						IsRange: permItem.RangeEnd != "",
-					})
-				}
-
-				for _, permItem := range roleItem.KVWrite {
-					writePerms = append(writePerms, requests.KVPerm{
-						Key:     permItem.Key,
-						IsRange: permItem.RangeEnd != "",
-					})
-				}
-
-				item.Name = roleItem.Name
-				item.ReadPerms = readPerms
-				item.WritePerms = writePerms
-			}
-		} else if c.Request().Method == http.MethodPost {
+		if c.Request().Method == http.MethodPost {
 			// POST request
 			err = c.Bind(&item)
 			if err == nil {
-				err = etcdClient.AddRole(item.Name, item.GetReadPerms(), item.GetWritePerms())
+				err = etcdClient.AddRole(item.Name)
 
 				if err == nil {
 					return c.Redirect(http.StatusSeeOther, "/cluster/roles/list?filter="+item.Name)
@@ -139,7 +114,7 @@ func createRole(c echo.Context) error {
 		code,
 		"roles/create.html",
 		map[string]interface{}{
-			"Title": "Create Role", // FIX: for edit
+			"Title": "Create Role",
 			"Item":  item,
 			"Error": utils.ErrorMessage(err),
 			"csrf":  c.Get("csrf").(string),
@@ -168,4 +143,116 @@ func deleteRole(c echo.Context) error {
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/cluster/roles/list?filter="+name)
+}
+
+func editRolePermissions(c echo.Context) error {
+	var (
+		code       = http.StatusOK
+		item       requests.RoleCreate
+		err        error
+		etcdClient *v3.Client
+	)
+
+	etcdClient, err = v3.New(
+		utils.GetEntryPoints(),
+		utils.GetSSLCertFile(), utils.GetSSLKeyFile(), utils.GetSSLCAFile(),
+		utils.GetUsername(), utils.GetPassword(),
+	)
+
+	if err == nil {
+		// GET request
+		item.Name = c.Param("name")
+		if c.Request().Method == http.MethodGet && item.Name != "" {
+			roleItem, getErr := etcdClient.RoleInfo(item.Name)
+			if getErr == nil {
+				kvPerms := make([]requests.KVPerm, 0, len(roleItem.Perms))
+
+				for _, permItem := range roleItem.Perms {
+					kvPerms = append(kvPerms, requests.KVPerm{
+						Key:      permItem.Key,
+						RangeEnd: permItem.RangeEnd,
+						Type:     permItem.Type,
+					})
+				}
+
+				item.Name = roleItem.Name
+				item.Perms = kvPerms
+			}
+		} else if c.Request().Method == http.MethodPost {
+			// POST request
+			err = c.Bind(&item)
+			if err == nil {
+				err = etcdClient.AddRole(item.Name)
+
+				if err == nil {
+					return c.Redirect(http.StatusSeeOther, "/cluster/roles/list?filter="+item.Name)
+				}
+			}
+		}
+	}
+
+	if err != nil {
+		code = http.StatusInternalServerError
+	}
+
+	return c.Render(
+		code,
+		"roles/edit-permissions.html",
+		map[string]interface{}{
+			"Title": "Edit Role Permissions",
+			"Item":  item,
+			"Error": utils.ErrorMessage(err),
+			"csrf":  c.Get("csrf").(string),
+		},
+	)
+}
+
+func revokeRolePermissions(c echo.Context) error {
+	var (
+		name       = c.FormValue("name")
+		method     = c.FormValue("_method")
+		request    requests.RoleRevokePerm
+		err        error
+		etcdClient *v3.Client
+		revokeList []types.KVPerm
+	)
+
+	if c.Request().Method == http.MethodPost && strings.EqualFold(method, http.MethodDelete) {
+		etcdClient, err = v3.New(
+			utils.GetEntryPoints(),
+			utils.GetSSLCertFile(), utils.GetSSLKeyFile(), utils.GetSSLCAFile(),
+			utils.GetUsername(), utils.GetPassword(),
+		)
+
+		if err == nil {
+			if bindErr := c.Bind(&request); bindErr == nil {
+				for _, permHash := range request.PermHashes {
+					permInput, inErr := requests.KVPerm{}.From(utils.Base64Decode(permHash))
+					if inErr != nil {
+						log.Errorf("revoke input error: %v", inErr)
+						continue
+					}
+
+					revokeList = append(revokeList, types.KVPerm(permInput))
+				}
+
+				err = etcdClient.RevokePermissions(name, revokeList)
+
+				if err != nil {
+					return c.Render(
+						http.StatusInternalServerError,
+						"roles/edit-permissions.html",
+						map[string]interface{}{
+							"Title": "Edit Role Permissions",
+							"Item":  types.RoleInfo{Name: name},
+							"Error": utils.ErrorMessage(err),
+							"csrf":  c.Get("csrf").(string),
+						},
+					)
+				}
+			}
+		}
+	}
+
+	return c.Redirect(http.StatusSeeOther, "/cluster/role/edit/"+name)
 }

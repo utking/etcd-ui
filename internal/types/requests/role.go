@@ -1,22 +1,53 @@
 package requests
 
-import "github.com/utking/etcd-ui/internal/providers/etcd/types"
+import (
+	"encoding/json"
+
+	"github.com/utking/etcd-ui/internal/providers/etcd/types"
+)
 
 type KVPerm struct {
-	Key     string `json:"key" form:"key"`
-	IsRange bool   `json:"is_range" form:"is_range"`
+	Key      string `json:"key" form:"key"`
+	RangeEnd string `json:"range_end" form:"range_end"`
+	Type     types.PermType
+}
+
+func (p KVPerm) String() string {
+	b64Val, err := json.Marshal(&p)
+	if err != nil {
+		return ""
+	}
+
+	return string(b64Val)
+}
+
+func (p KVPerm) From(in string) (KVPerm, error) {
+	var item KVPerm
+
+	err := json.Unmarshal([]byte(in), &item)
+	if err != nil {
+		return item, err
+	}
+
+	return item, nil
 }
 
 type RoleCreate struct {
+	Name  string   `json:"name" form:"name"`
+	Perms []KVPerm `json:"perms" form:"perms"`
+}
+
+type RoleRevokePerm struct {
 	Name       string   `json:"name" form:"name"`
-	ReadPerms  []KVPerm `json:"read_perm" form:"read_perm"`
-	WritePerms []KVPerm `json:"write_perm" form:"write_perm"`
+	PermHashes []string `json:"perms" form:"perms"` // base64 encoded [key, range)
 }
 
-func (r *RoleCreate) GetReadPerms() []types.KVPerm {
-	return []types.KVPerm{}
-}
+func (rev *RoleRevokePerm) KVPerm() []KVPerm {
+	result := make([]KVPerm, 0, len(rev.PermHashes))
 
-func (r *RoleCreate) GetWritePerms() []types.KVPerm {
-	return []types.KVPerm{}
+	for _, item := range rev.PermHashes {
+		result = append(result, KVPerm{Key: item})
+	}
+
+	return result
 }

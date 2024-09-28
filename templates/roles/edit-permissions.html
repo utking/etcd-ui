@@ -1,0 +1,154 @@
+{{ extends "layout.html" }}
+{{define "custom_css"}}
+<style>
+    .col-num {
+        width: 2rem;
+    }
+    .col-checkbox {
+        width: 1rem;
+    }
+    .col-type {
+        width: 8rem;
+    }
+    .col-is-range {
+        width: 2rem;
+        text-align: center;
+    }
+    .col-is-range-val {
+        text-align: center;
+        align-content: center;
+    }
+    #form-grant-permissions {
+        display: none;
+    }
+</style>
+{{end}}
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}} for {{.data.Item.Name}}</h3>
+        <span>
+            <a href="/cluster/role?name={{.data.Item.Name}}">(back to role)</a>
+        </span>
+    </div>
+
+    {{if not .data.Error}}
+    <div class="col-12 mb-2">
+        <span id="show-form" class="btn btn-info" onclick="toggleForm(this)">Grant new...</span>
+    </div>
+    <form action="/cluster/role/grant/{{.data.Item.Name}}" method="post" class="col-12" id="form-grant-permissions">
+        <input type="hidden" name="csrf" value="{{.data.csrf}}">
+        <input type="hidden" name="name" value="{{.data.Item.Name}}">
+
+        <div class="col-12 mb-2">
+            <h5>Add Permissions</h5>
+            <table class="table talbe-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th class="col-is-range">Range</th>
+                        <th>Key</th>
+                        <th>Range End</th>
+                        <th class="col-type">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-is-range-val">
+                            <input type="checkbox" name="grant_is_range">
+                        </td>
+                        <td>
+                            <input class="form-control"
+                                autocomplete="off"
+                                placeholder="key"
+                                minlength="1"
+                                name="grant_key"
+                                maxlength="1024">
+                        </td>
+                        <td>
+                            <input class="form-control"
+                                autocomplete="off"
+                                placeholder="range end (optional)"
+                                minlength="1"
+                                name="grant_range_end"
+                                maxlength="1024">
+                        </td>
+                        <td>
+                            <select class="form-control" name="grant_type">
+                                <option value="0">Read</option>
+                                <option value="1">Write</option>
+                                <option value="2">ReadWrite</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-outline-primary" type="submit" value="grant">Grant Permission</button>
+        </div>
+    </form>
+
+    <form action="/cluster/role/revoke/{{.data.Item.Name}}" method="post" class="col-12 mt-2" id="form-permissions">
+        <input type="hidden" name="csrf" value="{{.data.csrf}}">
+        <input type="hidden" name="name" value="{{.data.Item.Name}}">
+
+        <div class="col-12 mb-2">
+            <h5>Current Permissions</h5>
+            <table class="table talbe-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th></th>
+                        <th>Ranges / Keys</th>
+                        <th class="col-type">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range $idx, $item := .data.Item.Perms}}
+                    <tr>
+                        <td class="col-num">{{inc $idx}}</td>
+                        <td class="col-checkbox">
+                            <input type="checkbox" name="perms" value="{{b64_enc $item.String}}">
+                        </td>
+                        <td>
+                            {{if eq $item.RangeEnd ""}}
+                            {{$item.Key}}{{$item.RangeEnd}}
+                            {{else}}
+                            [{{$item.Key}}, {{$item.RangeEnd}}) (prefix {{$item.Key}})
+                            {{end}}
+                        </td>
+                        <td>
+                            {{$item.Type}}
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Revoke Selected</button>
+        </div>
+    </form>
+    {{end}}
+{{end}}
+
+{{define "custom_js"}}
+<script lang="javascript">
+function toggleForm(el) {
+    const form = document.getElementById("form-grant-permissions");
+    const existing = document.getElementById("form-permissions");
+
+    form && (form.style.display = (form.style.display !== 'block' ? 'block' : 'none'));
+    existing && (existing.style.display = (form.style.display === 'block' ? 'none' : 'block'));
+    
+    el && (el.innerText = (form.style.display === 'block' ? 'Back to existing' : 'Grant new...'))
+}
+</script>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}
