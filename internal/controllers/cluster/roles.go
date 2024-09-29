@@ -256,3 +256,43 @@ func revokeRolePermissions(c echo.Context) error {
 
 	return c.Redirect(http.StatusSeeOther, "/cluster/role/edit/"+name)
 }
+
+func grantRolePermissions(c echo.Context) error {
+	var (
+		name       = c.FormValue("name")
+		request    requests.RoleGrantPerm
+		err        error
+		etcdClient *v3.Client
+	)
+
+	if c.Request().Method == http.MethodPost {
+		etcdClient, err = v3.New(
+			utils.GetEntryPoints(),
+			utils.GetSSLCertFile(), utils.GetSSLKeyFile(), utils.GetSSLCAFile(),
+			utils.GetUsername(), utils.GetPassword(),
+		)
+
+		if err == nil {
+			if bindErr := c.Bind(&request); bindErr == nil {
+				if err = request.Validate(); err == nil {
+					err = etcdClient.GrantPermissions(name, []types.KVPerm{request.KVPerm()})
+				}
+
+				if err != nil {
+					return c.Render(
+						http.StatusInternalServerError,
+						"roles/edit-permissions.html",
+						map[string]interface{}{
+							"Title": "Edit Role Permissions",
+							"Item":  types.RoleInfo{Name: name},
+							"Error": utils.ErrorMessage(err),
+							"csrf":  c.Get("csrf").(string),
+						},
+					)
+				}
+			}
+		}
+	}
+
+	return c.Redirect(http.StatusSeeOther, "/cluster/role/edit/"+name)
+}

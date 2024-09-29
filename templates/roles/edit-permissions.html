@@ -57,14 +57,14 @@
                 <tbody>
                     <tr>
                         <td class="col-is-range-val">
-                            <input type="checkbox" name="grant_is_range">
+                            <input type="checkbox" name="is_range" value-on="">
                         </td>
                         <td>
                             <input class="form-control"
                                 autocomplete="off"
                                 placeholder="key"
                                 minlength="1"
-                                name="grant_key"
+                                name="key"
                                 maxlength="1024">
                         </td>
                         <td>
@@ -72,11 +72,11 @@
                                 autocomplete="off"
                                 placeholder="range end (optional)"
                                 minlength="1"
-                                name="grant_range_end"
+                                name="range_end"
                                 maxlength="1024">
                         </td>
                         <td>
-                            <select class="form-control" name="grant_type">
+                            <select class="form-control" name="type">
                                 <option value="0">Read</option>
                                 <option value="1">Write</option>
                                 <option value="2">ReadWrite</option>
@@ -85,6 +85,12 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div>
+                <small class="text-info">
+                    <i>INFO: Is-Range and Range-End are mutually exclusive.</i>
+                </small>
+            </div>
         </div>
 
         <div class="form-group">

@@ -8,6 +8,7 @@ import (
 
 	"github.com/utking/etcd-ui/internal/providers/etcd/types"
 	"go.etcd.io/etcd/api/v3/authpb"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func (c *Client) RoleInfo(roleName string) (types.RoleInfo, error) {
@@ -114,6 +115,31 @@ func (c *Client) RevokePermissions(name string, perms []types.KVPerm) error {
 		_, revokeErr := c.client.RoleRevokePermission(ctx, name, perm.Key, perm.RangeEnd)
 		if revokeErr != nil {
 			errList = append(errList, revokeErr)
+		}
+	}
+
+	return errors.Join(errList...)
+}
+
+func (c *Client) GrantPermissions(name string, perms []types.KVPerm) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.opTimeout)
+	defer cancel()
+
+	var errList []error
+
+	for _, perm := range perms {
+		rangeEnd := perm.RangeEnd
+		// Define the range-end if we grant with prefix
+		if perm.RangeEnd == "" && perm.IsRange {
+			rangeEnd = clientv3.GetPrefixRangeEnd(perm.Key)
+		}
+
+		_, grantErr := c.client.RoleGrantPermission(
+			ctx, name,
+			perm.Key, rangeEnd, clientv3.PermissionType(perm.Type),
+		)
+		if grantErr != nil {
+			errList = append(errList, grantErr)
 		}
 	}
 

@@ -93,7 +93,7 @@ func createUser(c echo.Context) error {
 
 	if err == nil {
 		// GET request
-		item.Name = c.Param("name")
+		item.Name = c.QueryParam("name")
 		if c.Request().Method == http.MethodGet && item.Name != "" {
 			userItem, getErr := etcdClient.UserInfo(item.Name)
 			if getErr == nil {

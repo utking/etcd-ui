@@ -2,6 +2,10 @@ package requests
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
+	"slices"
+	"strings"
 
 	"github.com/utking/etcd-ui/internal/providers/etcd/types"
 )
@@ -10,6 +14,7 @@ type KVPerm struct {
 	Key      string `json:"key" form:"key"`
 	RangeEnd string `json:"range_end" form:"range_end"`
 	Type     types.PermType
+	IsRange  bool
 }
 
 func (p KVPerm) String() string {
@@ -50,4 +55,39 @@ func (rev *RoleRevokePerm) KVPerm() []KVPerm {
 	}
 
 	return result
+}
+
+type RoleGrantPerm struct {
+	Name     string         `json:"name" form:"name"`
+	Key      string         `json:"key" form:"key"`
+	RangeEnd string         `json:"range_end" form:"range_end"`
+	SetRange string         `json:"is_range" form:"is_range"`
+	Type     types.PermType `json:"type" form:"type"`
+}
+
+func (g *RoleGrantPerm) IsRange() bool {
+	return strings.EqualFold(g.SetRange, "on")
+}
+
+func (g *RoleGrantPerm) Validate() error {
+	var errList []error
+
+	if !slices.Contains([]types.PermType{types.PermRead, types.PermWrite, types.PermReadWrite}, g.Type) {
+		errList = append(errList, fmt.Errorf("unknown permissions type"))
+	}
+
+	if g.IsRange() && g.RangeEnd != "" {
+		errList = append(errList, fmt.Errorf("is-range and range-end are mutually exclusive; use just one"))
+	}
+
+	return errors.Join(errList...)
+}
+
+func (g *RoleGrantPerm) KVPerm() types.KVPerm {
+	return types.KVPerm{
+		Key:      g.Key,
+		RangeEnd: g.RangeEnd,
+		Type:     g.Type,
+		IsRange:  g.IsRange(),
+	}
 }

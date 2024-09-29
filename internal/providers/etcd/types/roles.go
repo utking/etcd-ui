@@ -25,6 +25,7 @@ type KVPerm struct {
 	Key      string
 	RangeEnd string
 	Type     PermType
+	IsRange  bool
 }
 
 type RoleInfo struct {
