@@ -38,9 +38,13 @@ If you have Etcd with auth enabled, you need to set the `ETCD_ADMIN_USER` and `E
 
 If your cluster runs with TLS, you can set `SSL_KEY`, `SSL_CERT`, and `SSL_CA` (SSL_CA can be empty; if non-empty, it must be valid). If the TLS files are valid, the username and password will be set to empty automatically.
 
+## Docker Compose
+
+You can run `docker compose up` to start a single-node test environment.
+
 ## Run in Docker
 
-You can build a Docker image to run the application in Docker. To build an image, run
+You can build a Docker image manually to run the application in Docker. To build an image, run
 
 ```bash
 docker build -t etcd-ui:local -f infra/docker/Dockerfile .

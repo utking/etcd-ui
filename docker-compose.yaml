@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 networks:
   app-tier:
@@ -16,7 +16,9 @@ services:
     networks:
       - app-tier
   myapp:
-    image: 'etcd-ui:local'
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
     volumes:
       - ./ssl:/app/ssl:ro
       - ./.env.docker:/app/.env:ro
