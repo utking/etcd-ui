@@ -7,7 +7,7 @@
     <div class="col-12 mb-2">
         <h3>{{.data.Title}}</h3>
         <span>
-            <a href="/cluster/keys/list">(back to all)</a>
+            <a href="/cluster/keys">(back to all)</a>
         </span>
     </div>
 
@@ -44,7 +44,7 @@
                         <input class="form-control" value="{{.data.Item.TTL}}"
                             name="ttl"
                             placeholder="TTL in seconds"
-                            min="0"
+                            min="-1"
                             type="number">
                     </td>
                 </tr>

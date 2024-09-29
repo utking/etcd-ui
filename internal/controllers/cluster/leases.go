@@ -103,7 +103,7 @@ func deleteLease(c echo.Context) error {
 		}
 	}
 
-	return c.Redirect(http.StatusSeeOther, "/cluster/leases/list")
+	return c.Redirect(http.StatusSeeOther, "/cluster/leases")
 }
 
 func createLease(c echo.Context) error {
@@ -142,7 +142,7 @@ func createLease(c echo.Context) error {
 					renewed, err = etcdClient.RenewLease(item.LeaseID)
 
 					if err == nil && renewed {
-						return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/cluster/leases/list?filter=%x", item.LeaseID))
+						return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/cluster/leases?filter=%x", item.LeaseID))
 					}
 				} else {
 					var newLease types.LeaseRecord
@@ -150,7 +150,7 @@ func createLease(c echo.Context) error {
 					// Create new
 					newLease, err = etcdClient.GrantLease(item.TTL)
 					if err == nil {
-						return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/cluster/leases/list?filter=%x", newLease.ID))
+						return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/cluster/leases?filter=%x", newLease.ID))
 					}
 				}
 			}

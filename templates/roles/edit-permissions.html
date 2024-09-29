@@ -1,4 +1,5 @@
 {{ extends "layout.html" }}
+
 {{define "custom_css"}}
 <style>
     .col-num {
@@ -23,6 +24,7 @@
     }
 </style>
 {{end}}
+
 {{define "content"}}
     <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
         <p>{{ .data.Error }}</p>

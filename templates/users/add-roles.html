@@ -22,14 +22,14 @@
     </div>
 
     <div class="col-12 mb-2">
-        <h3>{{.data.Title}}</h3>
+        <h3>{{.data.Title}} for {{.data.Item.Name}}</h3>
         <span>
-            <a href="/cluster/users">(back to all)</a>
+            <a href="/cluster/user?name={{.data.Item.Name}}">(back to user)</a>
         </span>
     </div>
 
     {{if not .data.Error }}
-    <form action="/cluster/user/edit?name={{.data.Item.Name}}" method="post" class="col-12">
+    <form action="/cluster/user/roles/add?name={{.data.Item.Name}}" method="post" class="col-12">
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
@@ -40,11 +40,11 @@
             </thead>
 
             <tbody id="items-list">
-                {{range $idx, $item := .data.Info.Roles}}
+                {{range $idx, $item := .data.Roles}}
                 <tr>
                     <td class="col-num">{{inc $idx}}</td>
                     <td class="col-checkbox">
-                        <input type="checkbox" name="revoke_roles" value="{{$item}}">
+                        <input type="checkbox" name="add_roles" value="{{$item}}">
                     </td>
                     <td>
                         <a href="/cluster/role/{{$item}}">{{$item}}</a>
@@ -56,20 +56,8 @@
 
         <div class="form-group">
             <input type="hidden" name="csrf" value="{{.data.csrf}}">
-            <input type="hidden" name="name" value="{{.data.Info.Name}}">
-            <a href="/cluster/user/roles/add?name={{.data.Info.Name}}" class="btn btn-outline-primary">Grant Roles...</a>
-            <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Revoke Selected</button>
-        </div>
-    </form>
-
-    <hr/>
-
-    <form action="/cluster/user/delete" method="post" class="col-12 mt-1">
-        <div class="form-group">
-            <input type="hidden" name="csrf" value="{{.data.csrf}}">
-            <input type="hidden" name="name" value="{{.data.Info.Name}}">
-            <a href="/cluster/user/passwd?name={{.data.Info.Name}}" class="btn btn-outline-primary">Change password...</a>
-            <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Delete User</button>
+            <input type="hidden" name="name" value="{{.data.Item.Name}}">
+            <button class="btn btn-outline-danger" type="submit">Grant</button>
         </div>
     </form>
     {{end}}

@@ -7,7 +7,7 @@
     <div class="col-12 mb-2">
         <h3>{{.data.Title}}</h3>
         <span>
-            <a href="/cluster/keys/list">(back to all)</a>
+            <a href="/cluster/keys">(back to all)</a>
         </span>
     </div>
 
@@ -27,7 +27,11 @@
                     <td>{{.data.KVItem.Key}}</td>
                     <td>{{.data.KVItem.Value.Unwrap}}</td>
                     <td>
+                        {{if eq .data.KVItem.LeaseID 0}}
+                        {{.data.KVItem.LeaseTTL}}
+                        {{else}}
                         <a href="/cluster/lease/{{.data.KVItem.LeaseID}}">{{.data.KVItem.LeaseTTL}}</a>
+                        {{end}}
                     </td>
                 </tr>
             </tbody>

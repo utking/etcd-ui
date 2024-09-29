@@ -100,7 +100,7 @@ func createRole(c echo.Context) error {
 				err = etcdClient.AddRole(item.Name)
 
 				if err == nil {
-					return c.Redirect(http.StatusSeeOther, "/cluster/roles/list?filter="+item.Name)
+					return c.Redirect(http.StatusSeeOther, "/cluster/roles?filter="+item.Name)
 				}
 			}
 		}
@@ -142,7 +142,7 @@ func deleteRole(c echo.Context) error {
 		}
 	}
 
-	return c.Redirect(http.StatusSeeOther, "/cluster/roles/list?filter="+name)
+	return c.Redirect(http.StatusSeeOther, "/cluster/roles?filter="+name)
 }
 
 func editRolePermissions(c echo.Context) error {
@@ -185,7 +185,7 @@ func editRolePermissions(c echo.Context) error {
 				err = etcdClient.AddRole(item.Name)
 
 				if err == nil {
-					return c.Redirect(http.StatusSeeOther, "/cluster/roles/list?filter="+item.Name)
+					return c.Redirect(http.StatusSeeOther, "/cluster/roles?filter="+item.Name)
 				}
 			}
 		}

@@ -114,7 +114,7 @@ func createKey(c echo.Context) error {
 				err = etcdClient.Put(item.Key, item.Value, item.TTL)
 
 				if err == nil {
-					return c.Redirect(http.StatusSeeOther, "/cluster/keys/list")
+					return c.Redirect(http.StatusSeeOther, "/cluster/keys")
 				}
 			}
 		}
@@ -156,5 +156,5 @@ func deleteKey(c echo.Context) error {
 		}
 	}
 
-	return c.Redirect(http.StatusSeeOther, "/cluster/keys/list")
+	return c.Redirect(http.StatusSeeOther, "/cluster/keys")
 }

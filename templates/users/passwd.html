@@ -1,0 +1,58 @@
+{{ extends "layout.html" }}
+
+{{define "custom_css"}}
+<style>
+    .col-num {
+        width: 2rem;
+        text-align: right;
+    }
+    .col-checkbox {
+        width: 1rem;
+    }
+    hr {
+        width: 100%;
+        margin-top: .25rem;
+    }
+</style>
+{{end}}
+
+{{define "content"}}
+    <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
+        <p>{{ .data.Error }}</p>
+    </div>
+
+    <div class="col-12 mb-2">
+        <h3>{{.data.Title}} for {{.data.Item.Name}}</h3>
+        <span>
+            <a href="/cluster/user?name={{.data.Item.Name}}">(back to user)</a>
+        </span>
+    </div>
+
+    <form action="/cluster/user/passwd?name={{.data.Item.Name}}" method="post" class="col-12">
+        <div class="form-group">
+            <label for="passwd-password">Password</label>
+            <input type="password"
+                autofocus
+                class="form-control"
+                id="passwd-password"
+                name="password"
+                placeholder="Password">
+        </div>
+        <div class="form-group">
+            <label for="passwd-confirmarion">Confirmation</label>
+            <input type="password"
+                class="form-control"
+                id="passwd-confirmarion"
+                name="confirmation"
+                placeholder="Confirmation">
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" name="csrf" value="{{.data.csrf}}">
+            <input type="hidden" name="name" value="{{.data.Item.Name}}">
+            <button class="btn btn-outline-danger" type="submit">Update Password</button>
+        </div>
+    </form>
+{{end}}
+
+{{define "footer-year"}}{{.year}}{{end}}

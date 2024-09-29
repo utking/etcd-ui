@@ -13,7 +13,7 @@ A simple UI for Etcd clusters. Tested with Etcd API v3 only.
 - [x] Allow getting and setting KV pairs
 - [x] Allow creating/modifying leases
 - [x] Allow creating/modifying roles
-- [ ] Allow creating/modifying users
+- [x] Allow creating/modifying users
 - [ ] Allow enabling/disabling auth
 
 ## Configuration

@@ -11,37 +11,35 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 	router.GET("/stats", clusterIndex)
 	router.GET("/elect/:id", electNewLeader)
 
-	router.GET("/leases/list", indexLeases)
+	router.GET("/leases", indexLeases)
 	router.GET("/lease/:id", infoLease)
 
-	router.GET("/lease/create", createLease)
+	router.Match([]string{"GET", "POST"}, "/lease/create", createLease)
 	router.GET("/lease/edit/:id", createLease)
-	router.POST("/lease/create", createLease)
 	router.POST("/lease/delete", deleteLease)
 
-	router.GET("/users/list", indexUsers)
 	router.GET("/user", infoUser)
-	router.GET("/user/edit", createUser)
-	router.GET("/user/create", createUser)
-	router.POST("/user/create", createUser)
+	router.GET("/users", indexUsers)
+	router.POST("/user/edit", revokeUserGroups)
 	router.POST("/user/delete", deleteUser)
+	router.Match([]string{"GET", "POST"}, "/user/roles/add", addUserGroups)
+	router.Match([]string{"GET", "POST"}, "/user/create", createUser)
+	router.Match([]string{"GET", "POST"}, "/user/passwd", passwdUser)
 
-	router.GET("/roles/list", indexRoles)
 	router.GET("/role", infoRole)
+	router.GET("/roles", indexRoles)
 	router.GET("/role/edit/:name", editRolePermissions)
 	router.POST("/role/revoke/:name", revokeRolePermissions)
 	router.POST("/role/grant/:name", grantRolePermissions)
-	router.GET("/role/create", createRole)
-	router.POST("/role/create", createRole)
 	router.POST("/role/delete", deleteRole)
+	router.Match([]string{"GET", "POST"}, "/role/create", createRole)
 
-	router.GET("/keys/list", listKeys)
 	router.GET("/key", infoKey)
+	router.GET("/keys", listKeys)
 
-	router.GET("/key/create", createKey)
 	router.GET("/key/edit", createKey)
-	router.POST("/key/create", createKey)
 	router.POST("/key/delete", deleteKey)
+	router.Match([]string{"GET", "POST"}, "/key/create", createKey)
 
 	webMenu.UserItems = append(webMenu.UserItems, map[string][]types.WebMenuItem{
 		"Cluster": {
@@ -63,7 +61,7 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 			{
 				Type:    "item",
 				Title:   "List",
-				URIPath: "/cluster/keys/list",
+				URIPath: "/cluster/keys",
 			},
 		},
 		"Leases": {
@@ -78,7 +76,7 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 			{
 				Type:    "item",
 				Title:   "List",
-				URIPath: "/cluster/leases/list",
+				URIPath: "/cluster/leases",
 			},
 		},
 		"Users": {
@@ -93,7 +91,7 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 			{
 				Type:    "item",
 				Title:   "List",
-				URIPath: "/cluster/users/list",
+				URIPath: "/cluster/users",
 			},
 		},
 		"Roles": {
@@ -108,7 +106,7 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 			{
 				Type:    "item",
 				Title:   "List",
-				URIPath: "/cluster/roles/list",
+				URIPath: "/cluster/roles",
 			},
 		},
 	})
