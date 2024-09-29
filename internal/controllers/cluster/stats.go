@@ -57,11 +57,12 @@ func clusterIndex(c echo.Context) error {
 		code,
 		"cluster/stats.html",
 		map[string]interface{}{
-			"Title":  "Cluster Stats",
-			"Error":  utils.ErrorMessage(err),
-			"Items":  members,
-			"Alarms": alarms,
-			"Header": stats,
+			"Title":      "Cluster Stats",
+			"Error":      utils.ErrorMessage(err),
+			"Items":      members,
+			"SingleNode": len(members) == 1,
+			"Alarms":     alarms,
+			"Header":     stats,
 		},
 	)
 }

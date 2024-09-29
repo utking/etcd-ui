@@ -55,6 +55,7 @@
             </thead>
 
             <tbody id="items-list">
+                {{$singleNode := .data.SingleNode}}
                 {{range $item := .data.Items}}
                 <tr>
                     <td>{{ $item.Name }}</td>
@@ -64,7 +65,11 @@
                     <td>{{ $item.Health.Version }}</td>
                     <td>{{ $item.Health.DBSize }}</td>
                     <td>
+                        {{if $singleNode}}
+                        {{ hex $item.ID }}
+                        {{else}}
                         {{ hex $item.ID }} (<a href="/cluster/elect/{{$item.ID}}">elect as leader</a>)
+                        {{end}}
                     </td>
                 </tr>
                 {{ end }}
