@@ -56,7 +56,6 @@ docker run -it --rm -p 8080:8080 -v $(pwd)/.env:/app/.env -v $(pwd)/ssl:/app/ssl
 
 ![main page](./docs/images/main.png)
 ![cluster stats page](./docs/images/stats.png)
-![menu](./docs/images/menu.png)
 ![keys](./docs/images/keys.png)
 ![keys with leases](./docs/images/keys-w-lease.png)
 ![key info](./docs/images/kv-info.png)
