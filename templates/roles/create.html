@@ -7,27 +7,29 @@
     <div class="col-12 mb-2">
         <h3>{{.data.Title}}</h3>
         <span>
-            <a href="/cluster/leases">(back to all)</a>
+            <a href="/cluster/roles">(back to all)</a>
         </span>
     </div>
 
     <div class="col-12 mb-2">
-        <form method="post" action="/cluster/lease/create">
+        <form method="post" action="/cluster/role/create">
         <div class="form-group">
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
-                    <th>TTL, sec</th>
+                    <th>Role Name</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        <input class="form-control" value="{{.data.Item.TTL}}"
-                            placeholder="TTL in seconds"
-                            name="ttl"
-                            min="2"
-                            type="number">
+                        <input class="form-control" value="{{.data.Item.Name}}"
+                            autocomplete="off"
+                            placeholder="Role name"
+                            autofocus
+                            minlength="2"
+                            name="name"
+                            maxlength="256">
                     </td>
                 </tr>
             </tbody>
@@ -36,12 +38,7 @@
 
         <div class="form-group">
             <input type="hidden" name="csrf" value="{{.data.csrf}}">
-            <input type="hidden" name="lease_id" value="{{.data.Item.LeaseID}}">
-            <button class="btn btn-outline-primary" type="submit">Save</button>
-        </div>
-
-        <div>
-            <small class="text-info"><i>Info: Empty, zero, or negative TTLs will default to 2s</i></small>
+            <button class="btn btn-outline-primary" type="submit">Create</button>
         </div>
         </form>
     </div>

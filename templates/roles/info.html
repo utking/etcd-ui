@@ -21,40 +21,31 @@
             </thead>
 
             <tbody id="items-list">
+                {{range $item := .data.Info.Perms}}
                 <tr>
-                    <th>KV Read</th>
+                    <td>{{$item.Type}}</td>
                     <td>
-                        <ul>
-                    {{range $item := .data.Info.KVRead}}
-                    <li>
                         {{if eq $item.RangeEnd ""}}
                         {{$item.Key}}{{$item.RangeEnd}}
                         {{else}}
                         [{{$item.Key}}, {{$item.RangeEnd}}) (prefix {{$item.Key}})
                         {{end}}
-                    </li>
-                    {{ end }}
-                        </ul>
                     </td>
                 </tr>
-                <tr>
-                    <th>KV Write</th>
-                    <td>
-                        <ul>
-                    {{range $item := .data.Info.KVWrite}}
-                    <li>
-                        {{if eq $item.RangeEnd ""}}
-                        {{$item.Key}}
-                        {{else}}
-                        [{{$item.Key}}, {{$item.RangeEnd}})
-                        {{end}}
-                    </li>
-                    {{ end }}
-                        </ul>
-                    </td>
-                </tr>
+                {{ end }}
             </tbody>
         </table>
+
+        {{if not .data.Error }}
+        <form action="/cluster/role/delete" method="post">
+            <div class="form-group">
+                <input type="hidden" name="csrf" value="{{.data.csrf}}">
+                <input type="hidden" name="name" value="{{.data.Info.Name}}">
+                <a href="/cluster/role/edit/{{.data.Info.Name}}" class="btn btn-outline-secondary">Edit Permissions</a>
+                <button class="btn btn-outline-danger" type="submit" value="delete" name="_method">Delete</button>
+            </div>
+        </form>
+        {{end}}
     </div>
 {{end}}
 

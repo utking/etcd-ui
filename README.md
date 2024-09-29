@@ -8,12 +8,12 @@ A simple UI for Etcd clusters. Tested with Etcd API v3 only.
 - [x] Allow moving the leader from the UI
 - [x] Show users list and user detail
 - [x] Show roles list and role detail
-- [x] Show keys list
+- [x] Show keys list and key detail
 - [x] Allow paswordless and password-protected setup (with BasicAuth)
 - [x] Allow getting and setting KV pairs
 - [x] Allow creating/modifying leases
-- [ ] Allow creating/modifying roles
-- [ ] Allow creating/modifying users
+- [x] Allow creating/modifying roles
+- [x] Allow creating/modifying users
 - [ ] Allow enabling/disabling auth
 
 ## Configuration

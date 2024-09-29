@@ -1,4 +1,22 @@
 {{ extends "layout.html" }}
+
+{{define "custom_css"}}
+<style>
+    .col-num {
+        width: 3rem;
+    }
+    .col-num-val {
+        text-align: right;
+    }
+    .col-id {
+        width: 10rem;
+    }
+    .col-id-val {
+        text-align: right;
+    }
+</style>
+{{end}}
+
 {{define "content"}}
     <div id="error-block" class="col-12 alert alert-danger" {{ if .data.Error }} style="display: block;" {{ end }}>
         <p>{{ .data.Error }}</p>
@@ -14,13 +32,15 @@
                 title="Create new">New...</a>
 
             <div class="form-group">
-                <input class="form-control" name="filter" value="{{.data.Filter}}" autofocus>
+                <input class="form-control" name="filter"
+                    placeholder="Full Lease ID (hex)"
+                    value="{{.data.Filter}}" autofocus>
             </div>
 
             <div class="form-group input-group mr-2">
                 <div class="input-group-append">
                     <button class="btn btn-outline-primary"
-                        type="submit" title="Filter">Filter</button>
+                        type="submit" title="Filter">Search</button>
                 </div>
             </div>
         </form>
@@ -30,16 +50,18 @@
         <table class="table table-hover table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th>ID</th>
+                    <th class="col-num">#</th>
+                    <th class="col-id">ID</th>
                     <th>Granted TTL, sec</th>
                     <th>Remaining TTL, sec</th>
                 </tr>
             </thead>
 
             <tbody id="items-list">
-                {{range $item := .data.Items}}
+                {{range $idx, $item := .data.Items}}
                 <tr>
-                    <td>
+                    <td class="col-num-val">{{inc $idx}}</td>
+                    <td class="col-id-val">
                         <a href="/cluster/lease/{{ $item.ID }}">{{ $item.HexID }}</a>
                     </td>
                     <td>{{ $item.GrantedTTL }}</td>

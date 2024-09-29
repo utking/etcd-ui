@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/base64"
 	"log"
 	"os"
 	"strconv"
@@ -96,4 +97,17 @@ func GetOpTimeout() time.Duration {
 	}
 
 	return time.Second * time.Duration(parsedTimeout)
+}
+
+func Base64Encode(input string) string {
+	return base64.StdEncoding.EncodeToString([]byte(input))
+}
+
+func Base64Decode(input string) string {
+	out, err := base64.StdEncoding.DecodeString(input)
+	if err != nil {
+		return ""
+	}
+
+	return string(out)
 }

@@ -2,6 +2,12 @@
 
 {{define "custom_css"}}
 <style>
+    .col-num {
+        width: 3rem;
+    }
+    .col-num-val {
+        text-align: right;
+    }
     .col-ttl {
         width: 10rem;
         text-align: center;
@@ -30,7 +36,9 @@
                 title="Create new">New...</a>
 
             <div class="form-group">
-                <input class="form-control" name="filter" value="{{.data.Filter}}" autofocus>
+                <input class="form-control" name="filter"
+                    placeholder="Search prefix"
+                    value="{{.data.Filter}}" autofocus>
             </div>
 
             <div class="form-group input-group mr-2">
@@ -46,14 +54,16 @@
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
+                    <th class="col-num">#</th>
                     <th>Key Name</th>
                     <th class="col-ttl">TTL, sec</th>
                 </tr>
             </thead>
 
             <tbody id="items-list">
-                {{range $item := .data.Items}}
+                {{range $idx, $item := .data.Items}}
                 <tr>
+                    <td class="col-num-val">{{inc $idx}}</td>
                     <td>
                         <a href="/cluster/key?key={{ $item.Key }}">{{ $item.Key }}</a>
                     </td>

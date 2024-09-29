@@ -7,45 +7,51 @@
     <div class="col-12 mb-2">
         <h3>{{.data.Title}}</h3>
         <span>
-            <a href="/cluster/keys">(back to all)</a>
+            <a href="/cluster/users">(back to all)</a>
         </span>
     </div>
 
     <div class="col-12 mb-2">
-        <form method="post" action="/cluster/key/create">
+        <form method="post" action="/cluster/user/create">
         <div class="form-group">
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
-                    <th>Key</th>
-                    <th>Value</th>
-                    <th>TTL, sec</th>
+                    <th>Name</th>
+                    <th>Password</th>
+                    <th>Confirmation</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        <input class="form-control" value="{{.data.Item.Key}}"
+                        <input class="form-control" value="{{.data.Item.Name}}"
                             autocomplete="off"
-                            placeholder="Key name"
+                            placeholder="Username"
                             autofocus
                             minlength="2"
                             name="key"
                             maxlength="256">
                     </td>
                     <td>
-                        <input class="form-control" value="{{.data.Item.Value}}"
+                        <input class="form-control"
+                            type="password"
                             autocomplete="off"
-                            placeholder="Value"
-                            name="value"
+                            placeholder="Password"
+                            autofocus
+                            minlength="2"
+                            name="password"
                             maxlength="256">
                     </td>
                     <td>
-                        <input class="form-control" value="{{.data.Item.TTL}}"
-                            name="ttl"
-                            placeholder="TTL in seconds"
-                            min="-1"
-                            type="number">
+                        <input class="form-control"
+                            type="password"
+                            autocomplete="off"
+                            placeholder="Confirmation"
+                            autofocus
+                            minlength="2"
+                            name="confirmation"
+                            maxlength="256">
                     </td>
                 </tr>
             </tbody>
@@ -55,10 +61,6 @@
         <div class="form-group">
             <input type="hidden" name="csrf" value="{{.data.csrf}}">
             <button class="btn btn-outline-primary" type="submit">Save</button>
-        </div>
-
-        <div>
-            <small class="text-danger"><i>Warning: Changing key name means creating a new key-value pair</i></small>
         </div>
         </form>
     </div>

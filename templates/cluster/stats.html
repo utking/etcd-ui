@@ -25,11 +25,11 @@
             <thead class="thead-light">
                 <tr>
                     <th class="col-setting-key">ClusterID</th>
-                    <td>{{.data.Header.ClusterID}}</td>
+                    <td>{{hex .data.Header.ClusterID}}</td>
                 </tr>
                 <tr>
                     <th>Responder Member ID</th>
-                    <td>{{.data.Header.MemberID}}</td>
+                    <td>{{hex .data.Header.MemberID}}</td>
                 </tr>
                 <tr>
                     <th>Raft Term</th>
@@ -64,7 +64,7 @@
                     <td>{{ $item.Health.Version }}</td>
                     <td>{{ $item.Health.DBSize }}</td>
                     <td>
-                        {{ $item.ID }} (<a href="/cluster/elect/{{$item.ID}}">elect as leader</a>)
+                        {{ hex $item.ID }} (<a href="/cluster/elect/{{$item.ID}}">elect as leader</a>)
                     </td>
                 </tr>
                 {{ end }}
