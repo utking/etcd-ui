@@ -1,6 +1,7 @@
 package cluster
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -18,6 +19,15 @@ func clusterIndex(c echo.Context) error {
 		members = make([]types.MemberRecord, 0)
 		alarms  = make([]types.AlarmRecord, 0)
 	)
+
+	authEnabled, authCheckErr := v3.CheckAuthEnabled(
+		utils.GetEntryPoints(),
+		utils.GetSSLCertFile(), utils.GetSSLKeyFile(), utils.GetSSLCAFile(),
+	)
+
+	if authCheckErr != nil {
+		log.Printf("error checking if auth is enabled: %+v\n", authCheckErr)
+	}
 
 	etcdClient, err := v3.New(
 		utils.GetEntryPoints(),
@@ -57,12 +67,13 @@ func clusterIndex(c echo.Context) error {
 		code,
 		"cluster/stats.html",
 		map[string]interface{}{
-			"Title":      "Cluster Stats",
-			"Error":      utils.ErrorMessage(err),
-			"Items":      members,
-			"SingleNode": len(members) == 1,
-			"Alarms":     alarms,
-			"Header":     stats,
+			"Title":       "Cluster Stats",
+			"Error":       utils.ErrorMessage(err),
+			"Items":       members,
+			"SingleNode":  len(members) == 1,
+			"AuthEnabled": authEnabled,
+			"Alarms":      alarms,
+			"Header":      stats,
 		},
 	)
 }
@@ -87,6 +98,35 @@ func electNewLeader(c echo.Context) error {
 				err = electionErr
 			}
 		}
+	}
+
+	if err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]interface{}{
+				"Error": utils.ErrorMessage(err),
+			},
+		)
+	}
+
+	time.Sleep(time.Second)
+
+	return c.Redirect(http.StatusSeeOther, "/cluster/stats")
+}
+
+func clusterFlipAuth(c echo.Context) error {
+	var (
+		action = c.Param("action")
+	)
+
+	etcdClient, err := v3.New(
+		utils.GetEntryPoints(),
+		utils.GetSSLCertFile(), utils.GetSSLKeyFile(), utils.GetSSLCAFile(),
+		utils.GetUsername(), utils.GetPassword(),
+	)
+
+	if err == nil {
+		err = etcdClient.EnableAuth(action == "enable")
 	}
 
 	if err != nil {

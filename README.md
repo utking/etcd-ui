@@ -14,7 +14,7 @@ A simple UI for Etcd clusters. Tested with Etcd API v3 only.
 - [x] Allow creating/modifying leases
 - [x] Allow creating/modifying roles
 - [x] Allow creating/modifying users
-- [ ] Allow enabling/disabling auth
+- [x] Allow enabling/disabling auth
 
 ## Configuration
 
@@ -38,9 +38,13 @@ If you have Etcd with auth enabled, you need to set the `ETCD_ADMIN_USER` and `E
 
 If your cluster runs with TLS, you can set `SSL_KEY`, `SSL_CERT`, and `SSL_CA` (SSL_CA can be empty; if non-empty, it must be valid). If the TLS files are valid, the username and password will be set to empty automatically.
 
+## Docker Compose
+
+You can run `docker compose up` to start a single-node test environment.
+
 ## Run in Docker
 
-You can build a Docker image to run the application in Docker. To build an image, run
+You can build a Docker image manually to run the application in Docker. To build an image, run
 
 ```bash
 docker build -t etcd-ui:local -f infra/docker/Dockerfile .
@@ -56,7 +60,6 @@ docker run -it --rm -p 8080:8080 -v $(pwd)/.env:/app/.env -v $(pwd)/ssl:/app/ssl
 
 ![main page](./docs/images/main.png)
 ![cluster stats page](./docs/images/stats.png)
-![menu](./docs/images/menu.png)
 ![keys](./docs/images/keys.png)
 ![keys with leases](./docs/images/keys-w-lease.png)
 ![key info](./docs/images/kv-info.png)
