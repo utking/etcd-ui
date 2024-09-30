@@ -100,3 +100,18 @@ func (c *Client) EndpointsStatus() (map[uint64]types.EndpointStatusRecord, error
 
 	return status, nil
 }
+
+func (c *Client) EnableAuth(enable bool) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.opTimeout)
+	defer cancel()
+
+	if enable {
+		_, err = c.client.Auth.AuthEnable(ctx)
+
+		return
+	}
+
+	_, err = c.client.Auth.AuthDisable(ctx)
+
+	return
+}

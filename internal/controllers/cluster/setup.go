@@ -9,6 +9,7 @@ func Setup(app *echo.Echo, webMenu *types.WebMenu) {
 	router := app.Group("/cluster")
 
 	router.GET("/stats", clusterIndex)
+	router.GET("/auth/:action", clusterFlipAuth)
 	router.GET("/elect/:id", electNewLeader)
 
 	router.GET("/leases", indexLeases)

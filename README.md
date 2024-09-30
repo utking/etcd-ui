@@ -14,7 +14,7 @@ A simple UI for Etcd clusters. Tested with Etcd API v3 only.
 - [x] Allow creating/modifying leases
 - [x] Allow creating/modifying roles
 - [x] Allow creating/modifying users
-- [ ] Allow enabling/disabling auth
+- [x] Allow enabling/disabling auth
 
 ## Configuration
 

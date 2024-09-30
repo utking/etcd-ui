@@ -2,8 +2,8 @@
 
 {{define "custom_css"}}
 <style scoped>
-    table > thead > tr > th.col-setting-key,
-    table > thead > tr > th.col-member-name
+    table > tbody > tr > td.col-setting-key,
+    table > tbody > tr > td.col-member-name
     {
         width: 15rem;
     }
@@ -22,20 +22,30 @@
     <div class="col-12">
         {{if .data.Header}}
         <table class="table table-striped mb-2">
-            <thead class="thead-light">
+            <tbody class="thead-light">
                 <tr>
-                    <th class="col-setting-key">ClusterID</th>
+                    <td class="col-setting-key">ClusterID</td>
                     <td>{{hex .data.Header.ClusterID}}</td>
                 </tr>
                 <tr>
-                    <th>Responder Member ID</th>
+                    <td>Responder Member ID</td>
                     <td>{{hex .data.Header.MemberID}}</td>
                 </tr>
                 <tr>
-                    <th>Raft Term</th>
+                    <td>Raft Term</td>
                     <td>{{.data.Header.RaftTerm}}</td>
                 </tr>
-            </thead>
+                <tr>
+                    <td>Auth Enabled?</td>
+                    <td>
+                        {{if .data.AuthEnabled}}
+                        Yes (<a href="/cluster/auth/disable">disable</a>)
+                        {{else}}
+                        No (<a href="/cluster/auth/enable">enable</a>)
+                        {{end}}
+                    </td>
+                </tr>
+            </tbody>
         </table>
         {{end}}
 
